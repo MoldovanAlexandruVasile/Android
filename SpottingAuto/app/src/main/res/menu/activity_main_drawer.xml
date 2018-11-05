@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/homeGroup">
+        <item
+            android:id="@+id/nav_cars_list"
+            android:icon="@drawable/ic_car"
+            android:title="@string/announcements" />
+
+        <item
+            android:id="@+id/nav_add_announcement"
+            android:icon="@drawable/ic_add"
+            android:title="@string/add_announcement" />
+        <item
+            android:id="@+id/nav_my_announcements"
+            android:icon="@drawable/ic_format_list"
+            android:title="@string/my_announcements" />
+    </group>
+
+    <group android:id="@+id/logoutGroup">
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_exit"
+            android:title="@string/log_out" />
+    </group>
+</menu>

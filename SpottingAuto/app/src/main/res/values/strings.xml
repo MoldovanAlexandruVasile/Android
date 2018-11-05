@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SpottingAuto</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="add_announcement">Add announcement</string>
+    <string name="log_out">Log out</string>
+    <string name="my_announcements">My announcements</string>
+    <string name="announcements">Announcements</string>
+    <string name="no_announcement_yet">\t\t\t Sorry, you don\'t have \n any posted announcements yet.</string>
+</resources>
