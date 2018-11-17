@@ -1,8 +1,11 @@
 package com.alex.spottingauto;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,14 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     }
 
     private void setFieldsDataFromAnnouncement(Announcement announcement) {
+//        byte[] image = announcement.getImage();
+//        if (image.length != 0) {
+//            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+//            ImageView imageV = findViewById(R.id.carImage);
+//            imageV.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageV.getWidth(),
+//                    imageV.getHeight(), false));
+//        }
+
         TextView offerTV = findViewById(R.id.offerTV);
         offerTV.setText(announcement.getOfferType());
 
@@ -85,7 +96,7 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         startActivity(new Intent(ActivityCarAnnouncementDetails.this, ActivityMain.class));
         this.finish();
         return true;

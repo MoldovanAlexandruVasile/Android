@@ -39,9 +39,11 @@ import java.util.Objects;
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-//    static final Migration MIGRATION_1_2 = new Migration(2, 3) {
+//    static final Migration MIGRATION_1_2 = new Migration(4, 5) {
 //        @Override
 //        public void migrate(SupportSQLiteDatabase database) {
+//            database.execSQL("CREATE TABLE users_new (ID INTEGER primary key autoincrement, autor TEXT,  title TEXT, offerType TEXT, price TEXT, currency TEXT, brand TEXT, model TEXT,year TEXT, color TEXT, fuelType TEXT, transmission TEXT, onBoardKM TEXT, kmOrMiles TEXT, engineCapacity TEXT, doorsNumber TEXT, seatsNumber TEXT, contact TEXT, description TEXT )");
+//            database.execSQL("ALTER TABLE users_new RENAME TO announcements");
 //        }
 //    };
 
@@ -107,7 +109,7 @@ public class ActivityMain extends AppCompatActivity
         final Dialog customDialog = new Dialog(ActivityMain.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setCanceledOnTouchOutside(false);
-        customDialog.setContentView(R.layout.layout_custom_exit_pop_up);
+        customDialog.setContentView(R.layout.layout_custom_pop_up);
         TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
         textView.setText("Are you sure you want to go back at log in screen?");
         CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
@@ -160,7 +162,7 @@ public class ActivityMain extends AppCompatActivity
         final Dialog customDialog = new Dialog(ActivityMain.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setCanceledOnTouchOutside(false);
-        customDialog.setContentView(R.layout.layout_custom_exit_pop_up);
+        customDialog.setContentView(R.layout.layout_custom_pop_up);
         TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
         textView.setText("Are you sure you want to log out?");
         CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);

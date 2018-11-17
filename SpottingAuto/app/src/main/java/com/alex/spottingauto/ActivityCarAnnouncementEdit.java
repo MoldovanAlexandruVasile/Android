@@ -1,8 +1,11 @@
 package com.alex.spottingauto;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,12 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alex.spottingauto.Database.Announcement;
@@ -27,6 +32,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class ActivityCarAnnouncementEdit extends AppCompatActivity {
 
@@ -195,8 +201,43 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         final EditText contactET = findViewById(R.id.contactET);
         final EditText descriptionET = findViewById(R.id.descriptionET);
 
+        CardView deleteCardView = findViewById(R.id.deleteCardView);
+        deleteCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog customDialog = new Dialog(ActivityCarAnnouncementEdit.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setCanceledOnTouchOutside(false);
+                customDialog.setContentView(R.layout.layout_custom_pop_up);
+                TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
+                textView.setText(R.string.delete_announcement);
+                CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
+                yesCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ActivityMain.myDatabase.DAO().deleteAnnouncement(announcement);
+                        Toast.makeText(getApplicationContext(), "DELETED...", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), ActivityMain.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                CardView noCardView = customDialog.findViewById(R.id.noPopUpCardView);
+                noCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        customDialog.dismiss();
+                    }
+                });
+                Objects.requireNonNull(customDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+            }
+        });
+
         CardView updateCardView = findViewById(R.id.updateCardView);
-        updateCardView.setOnClickListener(new View.OnClickListener(){
+        updateCardView.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 String title = titleET.getText().toString();
@@ -233,8 +274,9 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
                 announcement.setSeatsNumber(seats);
                 announcement.setContact(contact);
                 announcement.setDescription(description);
+                announcement.setAutor(ActivityMain.acct.getEmail());
                 ActivityMain.myDatabase.DAO().updateAnnouncement(announcement);
-                Toast.makeText(getApplicationContext(), "Announcement updated successfully.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "UPDATED...", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -2,12 +2,9 @@ package com.alex.spottingauto;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -101,9 +98,9 @@ public class ActivityLogIn extends AppCompatActivity implements GoogleApiClient.
         final Dialog customDialog = new Dialog(ActivityLogIn.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setCanceledOnTouchOutside(false);
-        customDialog.setContentView(R.layout.layout_custom_exit_pop_up);
+        customDialog.setContentView(R.layout.layout_custom_pop_up);
         TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
-        textView.setText("Are you sure you want to exit?");
+        textView.setText(R.string.exit_dialog);
         CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
         yesCardView.setOnClickListener(new View.OnClickListener() {
             @Override

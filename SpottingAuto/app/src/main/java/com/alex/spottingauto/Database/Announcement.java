@@ -1,5 +1,6 @@
 package com.alex.spottingauto.Database;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -9,9 +10,8 @@ public class Announcement {
      @PrimaryKey(autoGenerate = true)
      private Integer ID;
 
-//     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-//     private byte[] image;
-
+     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+     private byte[] image;
      private String autor;
      private String title;
      private String offerType;
@@ -53,6 +53,14 @@ public class Announcement {
           this.seatsNumber = seatsNumber;
           this.contact = contact;
           this.description = description;
+     }
+
+     public byte[] getImage() {
+          return image;
+     }
+
+     public void setImage(byte[] image) {
+          this.image = image;
      }
 
      public String getKmOrMiles() {

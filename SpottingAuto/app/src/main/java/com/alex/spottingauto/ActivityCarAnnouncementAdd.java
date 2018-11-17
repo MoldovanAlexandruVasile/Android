@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.alex.spottingauto.Database.Announcement;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -213,10 +214,16 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
                         model, year, color, fuelType, transmission, kmOnBoard, kmOrMiles, engineCapacity, doors,
                         seats, contact, description);
                 ActivityMain.myDatabase.DAO().addAnnouncement(announcement);
-                Toast.makeText(getApplicationContext(), "Announcement added successfully.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ANNOUNCEMENT ADDED...", Toast.LENGTH_SHORT).show();
                 resetAllFields();
             }
         });
+    }
+
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
     }
 
     private void resetAllFields() {

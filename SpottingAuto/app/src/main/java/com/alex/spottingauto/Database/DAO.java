@@ -17,7 +17,10 @@ public interface DAO {
     @Update
     void updateAnnouncement(Announcement announcement);
 
-    @Query("SELECT * FROM announcements")
+    @Delete
+    void deleteAnnouncement(Announcement announcement);
+
+    @Query("SELECT * FROM announcements WHERE offerType != \"Not available\" ")
     List<Announcement> getAnnouncements();
 
     @Query("SELECT * FROM announcements WHERE autor = :autor")
