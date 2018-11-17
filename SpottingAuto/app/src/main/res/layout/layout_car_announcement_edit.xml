@@ -9,8 +9,8 @@
     android:focusableInTouchMode="true"
     android:onClick="hideKeyboard">
 
-    <HorizontalScrollView
-        android:id="@+id/carImagesScrollView"
+    <ImageView
+        android:id="@+id/carImage"
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:layout_alignParentLeft="true"
@@ -18,21 +18,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:scrollbars="none"
+        android:src="@drawable/car_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+    </ImageView>
 
     <android.support.v7.widget.CardView
         android:layout_width="305dp"
         android:layout_height="340dp"
-        android:layout_below="@+id/carImagesScrollView"
+        android:layout_below="@+id/carImage"
         android:layout_centerHorizontal="true"
         android:padding="20dp"
         app:cardCornerRadius="15dp">
@@ -67,38 +62,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Your title..."
-                        android:text="Selling Audi A8 at good price, negotiable. Contact me for more details"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="121dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="Available:"
-                        android:textColor="@color/black" />
-
-                    <Switch
-                        android:id="@+id/availabilitySwitch"
-                        android:layout_width="92dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="63dp"
-                        android:layout_marginRight="63dp"
-                        android:checked="true"
-                        android:textOff="No"
-                        android:textOn="Yes"
-                        tools:checked="true" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -143,7 +109,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Price..."
-                        android:text="120.000"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -228,17 +193,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="Color:"
+                        android:text="@string/color"
                         android:textColor="@color/black" />
 
-                    <EditText
-                        android:id="@+id/colorET"
+                    <Spinner
+                        android:id="@+id/colorSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Car color..."
-                        android:text="White"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
+                        android:hint="@string/car_color"
+                        android:spinnerMode="dialog"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -252,7 +215,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="Fuel type:"
+                        android:text="@string/fuel_type"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -273,7 +236,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="Transmission:"
+                        android:text="@string/transmission"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -294,7 +257,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="On board:"
+                        android:text="@string/on_board"
                         android:textColor="@color/black" />
 
                     <EditText
@@ -302,7 +265,6 @@
                         android:layout_width="85dp"
                         android:layout_height="61dp"
                         android:hint="On board..."
-                        android:text="106.978"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -325,7 +287,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="Engine capacity:"
+                        android:text="@string/engine_capacity"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -346,7 +308,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="No. of doors:"
+                        android:text="@string/no_of_doors"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -367,7 +329,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="No. of seats:"
+                        android:text="@string/no_of_seats"
                         android:textColor="@color/black" />
 
                     <Spinner
@@ -388,7 +350,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:hint="Contact details..."
+                        android:hint="@string/contact_details"
                         android:text="Contact:"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
@@ -398,7 +360,6 @@
                         android:id="@+id/contactET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0744333405"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -413,7 +374,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="Short description:"
+                        android:text="@string/short_description"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -424,14 +385,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:text="The 2018 Audi A8 is a flagship luxury sedan comes in a single, long-wheelbase L body style — hence the name A8 L. There are two trim levels available, each corresponding to a different engine. ... The A8 L 4.0T has a turbocharged 4.0-liter V8 good for 450 hp and 444 lb-ft of torque."
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/saveCardView"
+                    android:id="@+id/updateCardView"
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
                     app:cardBackgroundColor="@color/colorPrimaryDark"
@@ -447,7 +407,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="Save"
+                            android:text="@string/update"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
                     </RelativeLayout>
@@ -471,7 +431,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="Delete"
+                            android:text="@string/delete"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
                     </RelativeLayout>

@@ -1,6 +1,9 @@
 package com.alex.spottingauto;
 
 import android.app.Dialog;
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alex.spottingauto.Database.Database;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,6 +39,14 @@ import java.util.Objects;
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+//    static final Migration MIGRATION_1_2 = new Migration(2, 3) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase database) {
+//        }
+//    };
+
+    public static GoogleSignInAccount acct;
+    public static Database myDatabase;
     private GoogleApiClient googleApiClient;
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -50,7 +62,7 @@ public class ActivityMain extends AppCompatActivity
         if (!cd.isConnected())
             Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
@@ -72,6 +84,13 @@ public class ActivityMain extends AppCompatActivity
         fragmentManager.beginTransaction().
                 replace(R.id.content_frame, new FragmentCarsList())
                 .commit();
+
+        myDatabase = Room.databaseBuilder(getApplicationContext(), Database.class, "announcementsDb")
+                //.addMigrations(MIGRATION_1_2)
+                .allowMainThreadQueries()
+                .build();
+
+        //myDatabase.DAO().nukeTable();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -121,12 +140,11 @@ public class ActivityMain extends AppCompatActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentCarsList())
                     .commit();
-        else if (id == R.id.nav_add_announcement){
+        else if (id == R.id.nav_add_announcement) {
             Intent intent = new Intent(getApplicationContext(), ActivityCarAnnouncementAdd.class);
             startActivity(intent);
             finish();
-        }
-        else if (id == R.id.nav_my_announcements) {
+        } else if (id == R.id.nav_my_announcements) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new FragmentMyAnnouncements())
                     .commit();

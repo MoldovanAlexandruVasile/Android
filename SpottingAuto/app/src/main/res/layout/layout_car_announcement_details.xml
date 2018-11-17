@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/gray">
 
-    <HorizontalScrollView
-        android:id="@+id/carImagesScrollView"
+    <ImageView
+        android:id="@+id/carImage"
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:layout_alignParentLeft="true"
@@ -14,21 +14,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:scrollbars="none"
+        android:src="@drawable/car_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+    </ImageView>
 
     <android.support.v7.widget.CardView
         android:layout_width="305dp"
         android:layout_height="340dp"
-        android:layout_below="@+id/carImagesScrollView"
+        android:layout_below="@+id/carImage"
         android:layout_centerHorizontal="true"
         android:padding="20dp"
         app:cardCornerRadius="15dp">
@@ -61,31 +56,6 @@
                         android:id="@+id/offerTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sell"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="118dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginStart="35dp"
-                        android:text="Available"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/availabilityTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Yes"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -109,7 +79,6 @@
                         android:id="@+id/priceTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="120.000$"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -133,7 +102,6 @@
                         android:id="@+id/brandTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Audi"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -157,7 +125,6 @@
                         android:id="@+id/modelTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="A8"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -181,7 +148,6 @@
                         android:id="@+id/yearTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="2018"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -205,7 +171,6 @@
                         android:id="@+id/colorTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="White"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -229,7 +194,6 @@
                         android:id="@+id/fuelTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Benzine"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -245,7 +209,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="35dp"
                         android:layout_marginStart="35dp"
-                        android:text="Transmision:"
+                        android:text="Transmission:"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -253,7 +217,6 @@
                         android:id="@+id/transmisionTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Manual"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -277,7 +240,6 @@
                         android:id="@+id/kmOnBoardTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="106.978"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -302,7 +264,6 @@
                         android:id="@+id/engineCapacityTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="3.0"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -326,7 +287,6 @@
                         android:id="@+id/doorsNoTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="5"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -350,7 +310,6 @@
                         android:id="@+id/seatsNoTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="5"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -374,7 +333,6 @@
                         android:id="@+id/contactTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0744333405"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -400,7 +358,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="35dp"
                         android:layout_marginStart="35dp"
-                        android:text="The 2018 Audi A8 is a flagship luxury sedan comes in a single, long-wheelbase L body style — hence the name A8 L. There are two trim levels available, each corresponding to a different engine. ... The A8 L 4.0T has a turbocharged 4.0-liter V8 good for 450 hp and 444 lb-ft of torque."
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>

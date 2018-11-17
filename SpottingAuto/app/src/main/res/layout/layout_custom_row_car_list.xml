@@ -52,7 +52,6 @@
                         android:layout_marginLeft="79dp"
                         android:layout_marginStart="79dp"
                         android:layout_marginTop="0dp"
-                        android:text="Audi"
                         android:textColor="@android:color/black" />
                 </RelativeLayout>
 
@@ -78,7 +77,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
-                        android:text="2018"
                         android:textColor="@android:color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -89,7 +87,7 @@
                 android:layout_height="99dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/audi2018" />
+                app:srcCompat="@drawable/car_logo" />
 
             <RelativeLayout
                 android:id="@+id/zero"
@@ -107,7 +105,6 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:text="Selling Audi A8 at good price, negotiable. Contact me for more details"
                     android:textColor="@android:color/black" />
             </RelativeLayout>
 

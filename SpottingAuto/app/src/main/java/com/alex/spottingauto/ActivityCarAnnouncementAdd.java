@@ -2,18 +2,23 @@ package com.alex.spottingauto;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.alex.spottingauto.Database.Announcement;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,12 +37,14 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient));
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.layout_add_announcement);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        LinearLayout gallery = this.findViewById(R.id.gallery);
-        View view = inflater.inflate(R.layout.layout_car_announcement_details_image, gallery, false);
-        ImageView imageView = view.findViewById(R.id.carImageDetails);
-        imageView.setImageResource(R.drawable.add_image);
-        gallery.addView(view);
+        ImageView image = findViewById(R.id.carImage);
+        image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
         ConnectionDetector cd = new ConnectionDetector(this);
         if (!cd.isConnected())
             Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
@@ -53,6 +60,7 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         fillKmOrMilesSpinner();
         fillCurrencySpinner();
         fillEngineCapacity();
+        fillColorSpinner("Colors");
 
         final Spinner brandSpinner = this.findViewById(R.id.brandSpinner);
         brandSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -107,7 +115,7 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
                     fillModelSpinner("KiaModels");
                 else if (item.equals("Koenigsegg"))
                     fillModelSpinner("KoenigseggModels");
-                else if (item.equals("LamborghiniModels"))
+                else if (item.equals("Lamborghini"))
                     fillModelSpinner("LamborghiniModels");
                 else if (item.equals("Land Rover"))
                     fillModelSpinner("LandRoverModels");
@@ -161,7 +169,89 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        final EditText titleET = findViewById(R.id.titleET);
+        final Spinner offerTypeS = findViewById(R.id.offerSpinner);
+        final EditText priceET = findViewById(R.id.priceET);
+        final Spinner currencyS = findViewById(R.id.currencySpinner);
+        final Spinner brandS = findViewById(R.id.brandSpinner);
+        final Spinner modelS = findViewById(R.id.modelSpinner);
+        final Spinner yearS = findViewById(R.id.yearSpinner);
+        final Spinner colorS = findViewById(R.id.colorSpinner);
+        final Spinner fuelTypeS = findViewById(R.id.fuelSpinner);
+        final Spinner transmissionS = findViewById(R.id.transmissionSpinner);
+        final EditText kmOnBoardET = findViewById(R.id.kmOnBoardET);
+        final Spinner kmOmS = findViewById(R.id.kmOrMilesSpinner);
+        final Spinner engineCS = findViewById(R.id.engineCapacitySpinner);
+        final Spinner doorS = findViewById(R.id.doorsNoSpinner);
+        final Spinner seatS = findViewById(R.id.seatsNoSpinner);
+        final EditText contactET = findViewById(R.id.contactET);
+        final EditText descriptionET = findViewById(R.id.descriptionET);
+
+        CardView saveCardView = findViewById(R.id.saveCardView);
+        saveCardView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String title = titleET.getText().toString();
+                String offerType = offerTypeS.getSelectedItem().toString();
+                String price = priceET.getText().toString();
+                String currency = currencyS.getSelectedItem().toString();
+                String brand = brandS.getSelectedItem().toString();
+                String model = modelS.getSelectedItem().toString();
+                String year = yearS.getSelectedItem().toString();
+                String color = colorS.getSelectedItem().toString();
+                String fuelType = fuelTypeS.getSelectedItem().toString();
+                String transmission = transmissionS.getSelectedItem().toString();
+                String kmOnBoard = kmOnBoardET.getText().toString();
+                String kmOrMiles = kmOmS.getSelectedItem().toString();
+                String engineCapacity = engineCS.getSelectedItem().toString();
+                String doors = doorS.getSelectedItem().toString();
+                String seats = seatS.getSelectedItem().toString();
+                String contact = contactET.getText().toString();
+                String description = descriptionET.getText().toString();
+                Announcement announcement = new Announcement(title, ActivityMain.acct.getEmail(), offerType, price, currency, brand,
+                        model, year, color, fuelType, transmission, kmOnBoard, kmOrMiles, engineCapacity, doors,
+                        seats, contact, description);
+                ActivityMain.myDatabase.DAO().addAnnouncement(announcement);
+                Toast.makeText(getApplicationContext(), "Announcement added successfully.", Toast.LENGTH_SHORT).show();
+                resetAllFields();
+            }
+        });
     }
+
+    private void resetAllFields() {
+        ImageView imageView = findViewById(R.id.carImage);
+        imageView.setImageResource(R.drawable.add_image);
+        fillOfferSpinner();
+        fillBrandSpinner();
+        fillModelSpinner("AcuraModels");
+        fillYearSpinner();
+        fillFuelSpinner();
+        fillTransmissionSpinner();
+        fillDoorsSpinner();
+        fillSeatsSpinner();
+        fillKmOrMilesSpinner();
+        fillCurrencySpinner();
+        fillEngineCapacity();
+        fillColorSpinner("Colors");
+        EditText priceET = findViewById(R.id.priceET);
+        priceET.setText("");
+        EditText kmOnBoardET = findViewById(R.id.kmOnBoardET);
+        kmOnBoardET.setText("");
+        EditText contactET = findViewById(R.id.contactET);
+        contactET.setText("");
+        EditText descriptionET = findViewById(R.id.descriptionET);
+        descriptionET.setText("");
+    }
+
+    private void fillColorSpinner(String fileName) {
+        String[] values = readFromFile(fileName);
+        Spinner spinner = this.findViewById(R.id.colorSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+    }
+
 
     private void fillEngineCapacity() {
         String[] values = {"1.0", "1.2", "1.4", "1.6", "1.8", "1.9", "2.0", "3.0"};
@@ -291,6 +381,21 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ImageView imageView = findViewById(R.id.carImage);
+                imageView.setImageBitmap(bitmap);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void hideKeyboard(View view) {
         try {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -298,5 +403,12 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.d("STATE", e.toString());
         }
+    }
+
+    private void openGallery(){
+        Intent gallery = new Intent();
+        gallery.setType("image/*");
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), 1);
     }
 }

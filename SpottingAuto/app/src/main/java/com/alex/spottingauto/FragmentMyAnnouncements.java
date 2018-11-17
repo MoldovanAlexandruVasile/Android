@@ -10,8 +10,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.alex.spottingauto.Database.Announcement;
+
+import java.util.List;
 
 public class FragmentMyAnnouncements extends Fragment {
+
+    private static List<Announcement> announcements;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +30,8 @@ public class FragmentMyAnnouncements extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         CustomAdapter customAdapter = new CustomAdapter();
-        if (customAdapter.getCount() == 0) {
+        announcements = ActivityMain.myDatabase.DAO().getMyAnnouncements(ActivityMain.acct.getEmail());
+        if (announcements.size() == 0) {
             View carsListView = inflater.inflate(R.layout.layout_my_announcements_empty, container, false);
             return carsListView;
         } else {
@@ -33,10 +42,10 @@ public class FragmentMyAnnouncements extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    if (i == 0) {
-                        startActivity(new Intent(getActivity(), ActivityCarAnnouncementEdit.class));
-                        getActivity().finish();
-                    }
+                    Intent intent = new Intent(getActivity(), ActivityCarAnnouncementEdit.class);
+                    intent.putExtra("position", String.valueOf(i));
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             });
             return carsListView;
@@ -46,7 +55,7 @@ public class FragmentMyAnnouncements extends Fragment {
     class CustomAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return 1;
+            return announcements.size();
         }
 
         @Override
@@ -63,6 +72,12 @@ public class FragmentMyAnnouncements extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View viewEvent = layoutInflater.inflate(R.layout.layout_custom_row_car_list, null);
+            TextView titleTV = viewEvent.findViewById(R.id.titleTV);
+            titleTV.setText(announcements.get(position).getTitle());
+            TextView brand = viewEvent.findViewById(R.id.brandTextView);
+            brand.setText(announcements.get(position).getBrand());
+            TextView year = viewEvent.findViewById(R.id.yearTextView);
+            year.setText(announcements.get(position).getYear());
             return viewEvent;
         }
     }
