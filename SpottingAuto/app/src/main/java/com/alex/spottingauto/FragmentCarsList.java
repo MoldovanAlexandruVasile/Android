@@ -71,14 +71,12 @@ public class FragmentCarsList extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View viewEvent = layoutInflater.inflate(R.layout.layout_custom_row_car_list, null);
-            if (!announcements.get(position).getOfferType().toUpperCase().equals("NOT AVAILABLE")) {
-                TextView titleTV = viewEvent.findViewById(R.id.titleTV);
-                titleTV.setText(announcements.get(position).getTitle());
-                TextView brand = viewEvent.findViewById(R.id.brandTextView);
-                brand.setText(announcements.get(position).getBrand());
-                TextView year = viewEvent.findViewById(R.id.yearTextView);
-                year.setText(announcements.get(position).getYear());
-            }
+            TextView titleTV = viewEvent.findViewById(R.id.titleTV);
+            titleTV.setText(announcements.get(position).getTitle());
+            TextView brand = viewEvent.findViewById(R.id.brandTextView);
+            brand.setText(announcements.get(position).getBrand());
+            TextView year = viewEvent.findViewById(R.id.yearTextView);
+            year.setText(announcements.get(position).getYear());
             return viewEvent;
         }
     }
