@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -96,7 +97,8 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
                             JSONArray resultsArray = responseObject.getJSONArray("announcement");
                             for (Integer i = 0; i < resultsArray.length(); i++) {
                                 Announcement announcement = new Gson().fromJson(resultsArray.get(i).toString(), Announcement.class);
-                                announcementList.add(announcement);
+                                if (announcement.getAutor().equals(ActivityMain.acct.getEmail()))
+                                    announcementList.add(announcement);
                             }
                             announcement = announcementList.get(pos);
                             setFieldsDataFromAnnouncement(announcement);
@@ -298,6 +300,11 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
     }
 
     private void setFieldsDataFromAnnouncement(Announcement announcement) {
+        ImageView imageView = findViewById(R.id.carImage);
+        Glide.with(getApplicationContext())
+                .load(announcement.getImage_url())
+                .into(imageView);
+
         EditText titleET = findViewById(R.id.titleET);
         titleET.setText(announcement.getTitle());
         Integer pos;
@@ -308,6 +315,17 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
 
         EditText priceET = findViewById(R.id.priceET);
         priceET.setText(announcement.getPrice());
+
+        String currency = "";
+        if (announcement.getCurrency().equals("Euro"))
+            currency = "€";
+        else if (announcement.getCurrency().equals("Lyra"))
+            currency = "£";
+        else if (announcement.getCurrency().equals("Dollar"))
+            currency = "$";
+        Spinner currencyS = findViewById(R.id.currencySpinner);
+        pos = findPositionInSpinner(currencyS, currency);
+        currencyS.setSelection(pos);
 
         Spinner brandS = findViewById(R.id.brandSpinner);
         pos = findPositionInSpinner(brandS, announcement.getBrand());

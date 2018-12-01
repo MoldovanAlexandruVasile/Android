@@ -60,7 +60,7 @@ public class FragmentMyAnnouncements extends Fragment {
                             JSONArray resultsArray = responseObject.getJSONArray("announcement");
                             for (Integer i = 0; i < resultsArray.length(); i++) {
                                 Announcement announcement = new Gson().fromJson(resultsArray.get(i).toString(), Announcement.class);
-                                if (ActivityMain.acct.getEmail().equals(announcement.getAutor()))
+                                if (announcement.getAutor().equals(ActivityMain.acct.getEmail()))
                                     announcementList.add(announcement);
                             }
                             customAdapter = new CustomAdapter();

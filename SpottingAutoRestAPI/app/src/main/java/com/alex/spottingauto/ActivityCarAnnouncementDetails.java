@@ -88,7 +88,15 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
         offerTV.setText(announcement.getOfferType());
 
         TextView priceTV = findViewById(R.id.priceTV);
-        String text = announcement.getPrice() + announcement.getCurrency();
+        String currency = "";
+        if (announcement.getCurrency().equals("Euro"))
+            currency = " €";
+        else if (announcement.getCurrency().equals("Lyra"))
+            currency = " £";
+        else if (announcement.getCurrency().equals("Dollar"))
+            currency = " $";
+
+        String text = announcement.getPrice() + currency;
         priceTV.setText(text);
 
         TextView brandTV = findViewById(R.id.brandTV);
