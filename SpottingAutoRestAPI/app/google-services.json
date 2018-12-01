@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "927160637823",
+    "firebase_url": "https://spottingauto-1541097998771.firebaseio.com",
+    "project_id": "spottingauto-1541097998771",
+    "storage_bucket": "spottingauto-1541097998771.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927160637823:android:56cf6c51ba4308b8",
+        "android_client_info": {
+          "package_name": "com.alex.spottingauto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927160637823-orf63449heq1njqd443bkt2v61a8jlep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alex.spottingauto",
+            "certificate_hash": "2f0ba2608577378625e11f2600db07a52e225f9c"
+          }
+        },
+        {
+          "client_id": "927160637823-fbgg12q38vm4iqlbdk8tb1k7kjmr0nrh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrO_P0oZswqXa1HTRKEub7n4D1KhUS_NM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927160637823-fbgg12q38vm4iqlbdk8tb1k7kjmr0nrh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

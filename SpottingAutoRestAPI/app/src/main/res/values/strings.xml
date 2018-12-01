@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SpottingAuto</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="add_announcement">Add announcement</string>
+    <string name="log_out">Log out</string>
+    <string name="my_announcements">My announcements</string>
+    <string name="announcements">Announcements</string>
+    <string name="no_announcement_yet">\t\t\t Sorry, you don\'t have \n any posted announcements yet.</string>
+    <string name="car_color">Car color</string>
+    <string name="color">Color:</string>
+    <string name="fuel_type">Fuel type:</string>
+    <string name="transmission">Transmission:</string>
+    <string name="on_board">On board:</string>
+    <string name="engine_capacity">Engine capacity:</string>
+    <string name="no_of_doors">No. of doors:</string>
+    <string name="no_of_seats">No. of seats:</string>
+    <string name="contact_details">Contact details...</string>
+    <string name="short_description">Short description:</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="delete_announcement">Are you sure you want delete this announcement?</string>
+    <string name="exit_dialog">Are you sure you want to exit?</string>
+</resources>
