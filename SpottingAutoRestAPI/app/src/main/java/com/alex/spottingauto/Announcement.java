@@ -30,155 +30,180 @@ public class Announcement {
         this.ID = ID;
     }
 
-    public String getimage_url() {
+    public String getImage_url() {
         return image_url;
     }
 
-    public void setimage_url(String image_url) {
+    public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
 
-    public String getautor() {
+    public String getAutor() {
         return autor;
     }
 
-    public void setautor(String autor) {
+    public void setAutor(String autor) {
         this.autor = autor;
     }
 
-    public String gettitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void settitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getofferType() {
+    public String getOfferType() {
         return offerType;
     }
 
-    public void setofferType(String offerType) {
+    public void setOfferType(String offerType) {
         this.offerType = offerType;
     }
 
-    public String getprice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setprice(String price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public String getcurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setcurrency(String currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-    public String getbrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setbrand(String brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
 
-    public String getmodel() {
+    public String getModel() {
         return model;
     }
 
-    public void setmodel(String model) {
+    public void setModel(String model) {
         this.model = model;
     }
 
-    public String getyear() {
+    public String getYear() {
         return year;
     }
 
-    public void setyear(String year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
-    public String getcolor() {
+    public String getColor() {
         return color;
     }
 
-    public void setcolor(String color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
-    public String getfuelType() {
+    public String getFuelType() {
         return fuelType;
     }
 
-    public void setfuelType(String fuelType) {
+    public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
     }
 
-    public String gettransmission() {
+    public String getTransmission() {
         return transmission;
     }
 
-    public void settransmission(String transmission) {
+    public void setTransmission(String transmission) {
         this.transmission = transmission;
     }
 
-    public String getonBoardKM() {
+    public String getOnBoardKM() {
         return onBoardKM;
     }
 
-    public void setonBoardKM(String onBoardKM) {
+    public void setOnBoardKM(String onBoardKM) {
         this.onBoardKM = onBoardKM;
     }
 
-    public String getkmOrMiles() {
+    public String getKmOrMiles() {
         return kmOrMiles;
     }
 
-    public void setkmOrMiles(String kmOrMiles) {
+    public void setKmOrMiles(String kmOrMiles) {
         this.kmOrMiles = kmOrMiles;
     }
 
-    public String getengineCapacity() {
+    public String getEngineCapacity() {
         return engineCapacity;
     }
 
-    public void setengineCapacity(String engineCapacity) {
+    public void setEngineCapacity(String engineCapacity) {
         this.engineCapacity = engineCapacity;
     }
 
-    public String getdoorsNumber() {
+    public String getDoorsNumber() {
         return doorsNumber;
     }
 
-    public void setdoorsNumber(String doorsNumber) {
+    public void setDoorsNumber(String doorsNumber) {
         this.doorsNumber = doorsNumber;
     }
 
-    public String getseatsNumber() {
+    public String getSeatsNumber() {
         return seatsNumber;
     }
 
-    public void setseatsNumber(String seatsNumber) {
+    public void setSeatsNumber(String seatsNumber) {
         this.seatsNumber = seatsNumber;
     }
 
-    public String getcontact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setcontact(String contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setdescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Announcement{" +
+                "image_url='" + image_url + '\'' +
+                ", autor='" + autor + '\'' +
+                ", title='" + title + '\'' +
+                ", offerType='" + offerType + '\'' +
+                ", price='" + price + '\'' +
+                ", currency='" + currency + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", year='" + year + '\'' +
+                ", color='" + color + '\'' +
+                ", fuelType='" + fuelType + '\'' +
+                ", transmission='" + transmission + '\'' +
+                ", onBoardKM='" + onBoardKM + '\'' +
+                ", kmOrMiles='" + kmOrMiles + '\'' +
+                ", engineCapacity='" + engineCapacity + '\'' +
+                ", doorsNumber='" + doorsNumber + '\'' +
+                ", seatsNumber='" + seatsNumber + '\'' +
+                ", contact='" + contact + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

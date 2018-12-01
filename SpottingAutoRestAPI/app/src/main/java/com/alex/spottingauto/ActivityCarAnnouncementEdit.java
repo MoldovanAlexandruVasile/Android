@@ -23,6 +23,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,10 +45,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class ActivityCarAnnouncementEdit extends AppCompatActivity {
+    private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
+    private static List<Announcement> announcementList;
+    private static RequestQueue requestQueue;
+    private static Announcement announcement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        announcementList = new ArrayList<>();
         this.setTitle("Edit");
         this.getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient));
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,8 +84,34 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         fillColorSpinner("Colors");
 
         Intent intent = getIntent();
-        Integer pos = Integer.valueOf(intent.getStringExtra("position"));
-
+        final Integer pos = Integer.valueOf(intent.getStringExtra("position"));
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, ANNOUNCEMENT_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("Rest", response.toString());
+                        try {
+                            JSONObject responseObject = new JSONObject(response.toString());
+                            JSONArray resultsArray = responseObject.getJSONArray("announcement");
+                            for (Integer i = 0; i < resultsArray.length(); i++) {
+                                Announcement announcement = new Gson().fromJson(resultsArray.get(i).toString(), Announcement.class);
+                                announcementList.add(announcement);
+                            }
+                            announcement = announcementList.get(pos);
+                            setFieldsDataFromAnnouncement(announcement);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Rest Response", error.toString());
+                    }
+                });
+        requestQueue.add(objectRequest);
         final Spinner brandSpinner = this.findViewById(R.id.brandSpinner);
         brandSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -229,8 +272,7 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         });
 
         CardView updateCardView = findViewById(R.id.updateCardView);
-        updateCardView.setOnClickListener(new View.OnClickListener()
-        {
+        updateCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = titleET.getText().toString();
@@ -255,67 +297,67 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         });
     }
 
-//    private void setFieldsDataFromAnnouncement(Announcement announcement) {
-//        EditText titleET = findViewById(R.id.titleET);
-//        titleET.setText(announcement.getTitle());
-//        Integer pos;
-//
-//        Spinner offerS = findViewById(R.id.offerSpinner);
-//        pos = findPositionInSpinner(offerS, announcement.getOfferType());
-//        offerS.setSelection(pos);
-//
-//        EditText priceET = findViewById(R.id.priceET);
-//        priceET.setText(announcement.getPrice());
-//
-//        Spinner brandS = findViewById(R.id.brandSpinner);
-//        pos = findPositionInSpinner(brandS, announcement.getBrand());
-//        brandS.setSelection(pos);
-//
-//        Spinner modelS = findViewById(R.id.modelSpinner);
-//        pos = findPositionInSpinner(modelS, announcement.getModel());
-//        modelS.setSelection(pos);
-//
-//        Spinner yearS = findViewById(R.id.yearSpinner);
-//        pos = findPositionInSpinner(yearS, announcement.getYear());
-//        yearS.setSelection(pos);
-//
-//        Spinner colorS = findViewById(R.id.colorSpinner);
-//        pos = findPositionInSpinner(colorS, announcement.getColor());
-//        colorS.setSelection(pos);
-//
-//        Spinner fuelS = findViewById(R.id.fuelSpinner);
-//        pos = findPositionInSpinner(fuelS, announcement.getFuelType());
-//        fuelS.setSelection(pos);
-//
-//        Spinner transmissionS = findViewById(R.id.transmissionSpinner);
-//        pos = findPositionInSpinner(transmissionS, announcement.getTransmission());
-//        transmissionS.setSelection(pos);
-//
-//        EditText kmOnBoard = findViewById(R.id.kmOnBoardET);
-//        kmOnBoard.setText(announcement.getOnBoardKM());
-//
-//        Spinner kmOrMilesS = findViewById(R.id.kmOrMilesSpinner);
-//        pos = findPositionInSpinner(kmOrMilesS, announcement.getKmOrMiles());
-//        kmOrMilesS.setSelection(pos);
-//
-//        Spinner engineCS = findViewById(R.id.engineCapacitySpinner);
-//        pos = findPositionInSpinner(engineCS, announcement.getEngineCapacity());
-//        engineCS.setSelection(pos);
-//
-//        Spinner doorsS = findViewById(R.id.doorsNoSpinner);
-//        pos = findPositionInSpinner(doorsS, announcement.getDoorsNumber());
-//        doorsS.setSelection(pos);
-//
-//        Spinner seatsS = findViewById(R.id.seatsNoSpinner);
-//        pos = findPositionInSpinner(seatsS, announcement.getSeatsNumber());
-//        seatsS.setSelection(pos);
-//
-//        EditText contactET = findViewById(R.id.contactET);
-//        contactET.setText(announcement.getContact());
-//
-//        EditText descriptionET = findViewById(R.id.descriptionET);
-//        descriptionET.setText(announcement.getDescription());
-//    }
+    private void setFieldsDataFromAnnouncement(Announcement announcement) {
+        EditText titleET = findViewById(R.id.titleET);
+        titleET.setText(announcement.getTitle());
+        Integer pos;
+
+        Spinner offerS = findViewById(R.id.offerSpinner);
+        pos = findPositionInSpinner(offerS, announcement.getOfferType());
+        offerS.setSelection(pos);
+
+        EditText priceET = findViewById(R.id.priceET);
+        priceET.setText(announcement.getPrice());
+
+        Spinner brandS = findViewById(R.id.brandSpinner);
+        pos = findPositionInSpinner(brandS, announcement.getBrand());
+        brandS.setSelection(pos);
+
+        Spinner modelS = findViewById(R.id.modelSpinner);
+        pos = findPositionInSpinner(modelS, announcement.getModel());
+        modelS.setSelection(pos);
+
+        Spinner yearS = findViewById(R.id.yearSpinner);
+        pos = findPositionInSpinner(yearS, announcement.getYear());
+        yearS.setSelection(pos);
+
+        Spinner colorS = findViewById(R.id.colorSpinner);
+        pos = findPositionInSpinner(colorS, announcement.getColor());
+        colorS.setSelection(pos);
+
+        Spinner fuelS = findViewById(R.id.fuelSpinner);
+        pos = findPositionInSpinner(fuelS, announcement.getFuelType());
+        fuelS.setSelection(pos);
+
+        Spinner transmissionS = findViewById(R.id.transmissionSpinner);
+        pos = findPositionInSpinner(transmissionS, announcement.getTransmission());
+        transmissionS.setSelection(pos);
+
+        EditText kmOnBoard = findViewById(R.id.kmOnBoardET);
+        kmOnBoard.setText(announcement.getOnBoardKM());
+
+        Spinner kmOrMilesS = findViewById(R.id.kmOrMilesSpinner);
+        pos = findPositionInSpinner(kmOrMilesS, announcement.getKmOrMiles());
+        kmOrMilesS.setSelection(pos);
+
+        Spinner engineCS = findViewById(R.id.engineCapacitySpinner);
+        pos = findPositionInSpinner(engineCS, announcement.getEngineCapacity());
+        engineCS.setSelection(pos);
+
+        Spinner doorsS = findViewById(R.id.doorsNoSpinner);
+        pos = findPositionInSpinner(doorsS, announcement.getDoorsNumber());
+        doorsS.setSelection(pos);
+
+        Spinner seatsS = findViewById(R.id.seatsNoSpinner);
+        pos = findPositionInSpinner(seatsS, announcement.getSeatsNumber());
+        seatsS.setSelection(pos);
+
+        EditText contactET = findViewById(R.id.contactET);
+        contactET.setText(announcement.getContact());
+
+        EditText descriptionET = findViewById(R.id.descriptionET);
+        descriptionET.setText(announcement.getDescription());
+    }
 
     private Integer findPositionInSpinner(Spinner spinner, String text) {
         for (int i = 0; i < spinner.getCount(); i++) {
