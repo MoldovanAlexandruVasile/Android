@@ -37,6 +37,7 @@ public class FragmentMyAnnouncements extends Fragment {
     private static CustomAdapter customAdapter;
     private static ListView listView;
     private static View carsListView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +95,7 @@ public class FragmentMyAnnouncements extends Fragment {
     class CustomAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return 1;
+            return announcementList.size();
         }
 
         @Override
@@ -114,9 +115,10 @@ public class FragmentMyAnnouncements extends Fragment {
             try {
                 Announcement announcement = announcementList.get(position);
                 ImageView imageView = viewEvent.findViewById(R.id.logoImg);
-                Glide.with(getActivity().getApplicationContext())
-                        .load(announcement.getImage_url())
-                        .into(imageView);
+                if (!announcement.getImage_url().isEmpty())
+                    Glide.with(getActivity().getApplicationContext())
+                            .load(announcement.getImage_url())
+                            .into(imageView);
                 TextView titleTV = viewEvent.findViewById(R.id.titleTV);
                 titleTV.setText(announcement.getTitle());
                 TextView brand = viewEvent.findViewById(R.id.brandTextView);

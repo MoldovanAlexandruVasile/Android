@@ -113,9 +113,10 @@ public class FragmentCarsList extends Fragment {
             try {
                 Announcement announcement = announcementList.get(position);
                 ImageView imageView = viewEvent.findViewById(R.id.logoImg);
-                Glide.with(getActivity().getApplicationContext())
-                        .load(announcement.getImage_url())
-                        .into(imageView);
+                if (!announcement.getImage_url().isEmpty())
+                    Glide.with(getActivity().getApplicationContext())
+                            .load(announcement.getImage_url())
+                            .into(imageView);
                 TextView titleTV = viewEvent.findViewById(R.id.titleTV);
                 titleTV.setText(announcement.getTitle());
                 TextView brand = viewEvent.findViewById(R.id.brandTextView);

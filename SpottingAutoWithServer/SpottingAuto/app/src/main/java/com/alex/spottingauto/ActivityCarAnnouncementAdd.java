@@ -18,6 +18,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,9 +33,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ActivityCarAnnouncementAdd extends AppCompatActivity {
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/insertAnnouncement.php";
+    private static RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +49,7 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.layout_add_announcement);
         ImageView image = findViewById(R.id.carImage);
-        image.setOnClickListener(new View.OnClickListener(){
+        image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -188,62 +200,75 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         final EditText descriptionET = findViewById(R.id.descriptionET);
 
         CardView saveCardView = findViewById(R.id.saveCardView);
-        saveCardView.setOnClickListener(new View.OnClickListener(){
+        saveCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title = titleET.getText().toString();
-                String offerType = offerTypeS.getSelectedItem().toString();
-                String price = priceET.getText().toString();
-                String currency = currencyS.getSelectedItem().toString();
-                String brand = brandS.getSelectedItem().toString();
-                String model = modelS.getSelectedItem().toString();
-                String year = yearS.getSelectedItem().toString();
-                String color = colorS.getSelectedItem().toString();
-                String fuelType = fuelTypeS.getSelectedItem().toString();
-                String transmission = transmissionS.getSelectedItem().toString();
-                String kmOnBoard = kmOnBoardET.getText().toString();
-                String kmOrMiles = kmOmS.getSelectedItem().toString();
-                String engineCapacity = engineCS.getSelectedItem().toString();
-                String doors = doorS.getSelectedItem().toString();
-                String seats = seatS.getSelectedItem().toString();
-                String contact = contactET.getText().toString();
-                String description = descriptionET.getText().toString();
-
+                final String title = titleET.getText().toString();
+                final String offerType = offerTypeS.getSelectedItem().toString();
+                final String price = priceET.getText().toString();
+                final String currency = currencyS.getSelectedItem().toString();
+                String currencyText = "";
+                if (currency.equals("€"))
+                    currencyText = "Euro";
+                else if (currency.equals("£"))
+                    currencyText = "Lyra";
+                else if (currency.equals("$"))
+                    currencyText = "Dollar";
+                final String currencyFinal = currencyText;
+                final String brand = brandS.getSelectedItem().toString();
+                final String model = modelS.getSelectedItem().toString();
+                final String year = yearS.getSelectedItem().toString();
+                final String color = colorS.getSelectedItem().toString();
+                final String fuelType = fuelTypeS.getSelectedItem().toString();
+                final String transmission = transmissionS.getSelectedItem().toString();
+                final String kmOnBoard = kmOnBoardET.getText().toString();
+                final String kmOrMiles = kmOmS.getSelectedItem().toString();
+                final String engineCapacity = engineCS.getSelectedItem().toString();
+                final String doorsNumber = doorS.getSelectedItem().toString();
+                final String seatsNumber = seatS.getSelectedItem().toString();
+                final String contact = contactET.getText().toString();
+                final String description = descriptionET.getText().toString();
+                requestQueue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> parameters = new HashMap<>();
+                        parameters.put("image_url", "");
+                        parameters.put("autor", ActivityMain.acct.getEmail());
+                        parameters.put("title", title);
+                        parameters.put("offerType", offerType);
+                        parameters.put("price", price);
+                        parameters.put("currency", currencyFinal);
+                        parameters.put("brand", brand);
+                        parameters.put("model", model);
+                        parameters.put("year", year);
+                        parameters.put("color", color);
+                        parameters.put("fuelType", fuelType);
+                        parameters.put("transmission", transmission);
+                        parameters.put("onBoardKM", kmOnBoard);
+                        parameters.put("kmOrMiles", kmOrMiles);
+                        parameters.put("engineCapacity", engineCapacity);
+                        parameters.put("doorsNumber", doorsNumber);
+                        parameters.put("seatsNumber", seatsNumber);
+                        parameters.put("contact", contact);
+                        parameters.put("description", description);
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
                 Toast.makeText(getApplicationContext(), "ANNOUNCEMENT ADDED...", Toast.LENGTH_SHORT).show();
-                resetAllFields();
+                startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
+                finish();
             }
         });
-    }
-
-    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-        return outputStream.toByteArray();
-    }
-
-    private void resetAllFields() {
-        ImageView imageView = findViewById(R.id.carImage);
-        imageView.setImageResource(R.drawable.add_image);
-        fillOfferSpinner();
-        fillBrandSpinner();
-        fillModelSpinner("AcuraModels");
-        fillYearSpinner();
-        fillFuelSpinner();
-        fillTransmissionSpinner();
-        fillDoorsSpinner();
-        fillSeatsSpinner();
-        fillKmOrMilesSpinner();
-        fillCurrencySpinner();
-        fillEngineCapacity();
-        fillColorSpinner("Colors");
-        EditText priceET = findViewById(R.id.priceET);
-        priceET.setText("");
-        EditText kmOnBoardET = findViewById(R.id.kmOnBoardET);
-        kmOnBoardET.setText("");
-        EditText contactET = findViewById(R.id.contactET);
-        contactET.setText("");
-        EditText descriptionET = findViewById(R.id.descriptionET);
-        descriptionET.setText("");
     }
 
     private void fillColorSpinner(String fileName) {
@@ -254,7 +279,6 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-
     private void fillEngineCapacity() {
         String[] values = {"1.0", "1.2", "1.4", "1.6", "1.8", "1.9", "2.0", "3.0"};
         Spinner spinner = this.findViewById(R.id.engineCapacitySpinner);
@@ -262,7 +286,6 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinner.setAdapter(adapter);
     }
-
 
     private void fillTransmissionSpinner() {
         String[] values = {"Manual", "Automated"};
@@ -384,15 +407,15 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ImageView imageView = findViewById(R.id.carImage);
                 imageView.setImageBitmap(bitmap);
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -407,7 +430,7 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         }
     }
 
-    private void openGallery(){
+    private void openGallery() {
         Intent gallery = new Intent();
         gallery.setType("image/*");
         gallery.setAction(Intent.ACTION_GET_CONTENT);

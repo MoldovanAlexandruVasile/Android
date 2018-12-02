@@ -19,7 +19,7 @@ class AnnouncementRestHandler extends SimpleRest {
 		$requestContentType = 'application/json';//$_POST['HTTP_ACCEPT'];
 		$this ->setHttpHeaders($requestContentType, $statusCode);
 		
-		$result["announcements"] = $rawData;
+		$result["announcement"] = $rawData;
 
 		if(strpos($requestContentType,'application/json') !== false){
 			$response = $this->encodeJson($result);

@@ -35,6 +35,7 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     private static List<Announcement> announcementList;
     private static FragmentCarsList.CustomAdapter customAdapter;
     private static Announcement announcement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +81,10 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
 
     private void setFieldsDataFromAnnouncement() {
         ImageView imageView = findViewById(R.id.carImage);
-        Glide.with(getApplicationContext())
-                .load(announcement.getImage_url())
-                .into(imageView);
+        if (!announcement.getImage_url().isEmpty())
+            Glide.with(getApplicationContext())
+                    .load(announcement.getImage_url())
+                    .into(imageView);
 
         TextView offerTV = findViewById(R.id.offerTV);
         offerTV.setText(announcement.getOfferType());
