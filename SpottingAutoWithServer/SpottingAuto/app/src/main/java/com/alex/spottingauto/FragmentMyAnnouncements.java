@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentMyAnnouncements extends Fragment {
+    //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
     private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static RequestQueue requestQueue;
@@ -73,6 +74,7 @@ public class FragmentMyAnnouncements extends Fragment {
                                     Intent intent = new Intent(getActivity(), ActivityCarAnnouncementEdit.class);
                                     intent.putExtra("position", String.valueOf(i));
                                     startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                     getActivity().finish();
                                 }
                             });

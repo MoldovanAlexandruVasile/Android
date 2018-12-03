@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ActivityCarAnnouncementAdd extends AppCompatActivity {
+    //private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
     private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/insertAnnouncement.php";
     private static RequestQueue requestQueue;
 
@@ -266,6 +267,7 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
                 requestQueue.add(request);
                 Toast.makeText(getApplicationContext(), "ANNOUNCEMENT ADDED...", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 finish();
             }
         });
@@ -396,12 +398,14 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
         return true;
     }

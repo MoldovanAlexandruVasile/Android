@@ -32,6 +32,7 @@ import java.util.List;
 
 public class FragmentCarsList extends Fragment {
     private static RequestQueue requestQueue;
+    //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
     private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static View carsListView;
@@ -61,7 +62,8 @@ public class FragmentCarsList extends Fragment {
                             JSONArray resultsArray = responseObject.getJSONArray("announcement");
                             for (Integer i = 0; i < resultsArray.length(); i++) {
                                 Announcement announcement = new Gson().fromJson(resultsArray.get(i).toString(), Announcement.class);
-                                announcementList.add(announcement);
+                                if (!announcement.getOfferType().equals("Not available"))
+                                    announcementList.add(announcement);
                             }
                             customAdapter = new CustomAdapter();
                             listView.setAdapter(customAdapter);
@@ -71,6 +73,7 @@ public class FragmentCarsList extends Fragment {
                                     Intent intent = new Intent(getActivity(), ActivityCarAnnouncementDetails.class);
                                     intent.putExtra("position", String.valueOf(i));
                                     startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                     getActivity().finish();
                                 }
                             });

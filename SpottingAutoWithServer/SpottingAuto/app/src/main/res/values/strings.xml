@@ -22,4 +22,5 @@
     <string name="update">Update</string>
     <string name="delete_announcement">Are you sure you want delete this announcement?</string>
     <string name="exit_dialog">Are you sure you want to exit?</string>
+    <string name="avalability">Avalability:</string>
 </resources>

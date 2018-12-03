@@ -30,15 +30,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class ActivityMain extends AppCompatActivity
@@ -51,7 +42,7 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_nav_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackgroundResource(R.drawable.gradient);
         setSupportActionBar(toolbar);
@@ -107,6 +98,7 @@ public class ActivityMain extends AppCompatActivity
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(getApplicationContext(), ActivityLogIn.class);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 startActivity(intent);
             }
         });
@@ -134,6 +126,7 @@ public class ActivityMain extends AppCompatActivity
         else if (id == R.id.nav_add_announcement) {
             Intent intent = new Intent(getApplicationContext(), ActivityCarAnnouncementAdd.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
         } else if (id == R.id.nav_my_announcements) {
             fragmentManager.beginTransaction()
@@ -194,6 +187,7 @@ public class ActivityMain extends AppCompatActivity
                     public void onResult(Status status) {
                         Toast.makeText(getApplicationContext(), "You've been logged out.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), ActivityLogIn.class);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         startActivity(intent);
                     }
                 });

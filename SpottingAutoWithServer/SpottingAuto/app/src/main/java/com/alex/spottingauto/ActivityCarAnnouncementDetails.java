@@ -31,6 +31,7 @@ import java.util.List;
 
 public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     private static RequestQueue requestQueue;
+    //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
     private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static FragmentCarsList.CustomAdapter customAdapter;
@@ -142,12 +143,14 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ActivityCarAnnouncementDetails.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         startActivity(new Intent(ActivityCarAnnouncementDetails.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
         return true;
     }

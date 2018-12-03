@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -21,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +47,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ActivityCarAnnouncementEdit extends AppCompatActivity {
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
+//    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
+//    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/deleteAnnouncement.php";
+//    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/updateAnnouncement.php";
+private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
     private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/deleteAnnouncement.php";
     private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/updateAnnouncement.php";
     private static List<Announcement> announcementList;
@@ -106,7 +108,11 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
                                 if (announcement.getAutor().equals(ActivityMain.acct.getEmail()))
                                     announcementList.add(announcement);
                             }
+                            Switch avalability = findViewById(R.id.availabilitySwitch);
                             announcement = announcementList.get(pos);
+                            if (announcement.getOfferType().equals("Not available"))
+                                avalability.setChecked(false);
+                            else avalability.setChecked(true);
                             setFieldsDataFromAnnouncement(announcement);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -250,52 +256,57 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         deleteCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog customDialog = new Dialog(ActivityCarAnnouncementEdit.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setCanceledOnTouchOutside(false);
-                customDialog.setContentView(R.layout.layout_custom_pop_up);
-                TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
-                textView.setText(R.string.delete_announcement);
-                CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
-                yesCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        requestDeleteQueue = Volley.newRequestQueue(getApplicationContext());
-                        StringRequest request = new StringRequest(Request.Method.POST, DELETE_ANNOUNCEMENT_URL, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        }) {
-                            @Override
-                            protected Map<String, String> getParams() {
-                                Map<String, String> parameters = new HashMap<>();
-                                String ID = String.valueOf(announcement.getID());
-                                Log.e("ID", ID);
-                                parameters.put("ID", ID);
-                                return parameters;
-                            }
-                        };
-                        requestDeleteQueue.add(request);
-                        Toast.makeText(getApplicationContext(), "DELETED...", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), ActivityMain.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+                ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+                if (cd.isConnected()) {
+                    final Dialog customDialog = new Dialog(ActivityCarAnnouncementEdit.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setCanceledOnTouchOutside(false);
+                    customDialog.setContentView(R.layout.layout_custom_pop_up);
+                    TextView textView = customDialog.findViewById(R.id.exitPopupTextView);
+                    textView.setText(R.string.delete_announcement);
+                    CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
+                    yesCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            requestDeleteQueue = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest request = new StringRequest(Request.Method.POST, DELETE_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() {
+                                    Map<String, String> parameters = new HashMap<>();
+                                    String ID = String.valueOf(announcement.getID());
+                                    Log.e("ID", ID);
+                                    parameters.put("ID", ID);
+                                    return parameters;
+                                }
+                            };
+                            requestDeleteQueue.add(request);
+                            Toast.makeText(getApplicationContext(), "DELETED...", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), ActivityMain.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            finish();
+                        }
+                    });
 
-                CardView noCardView = customDialog.findViewById(R.id.noPopUpCardView);
-                noCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        customDialog.dismiss();
-                    }
-                });
-                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                customDialog.show();
+                    CardView noCardView = customDialog.findViewById(R.id.noPopUpCardView);
+                    noCardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            customDialog.dismiss();
+                        }
+                    });
+                    customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    customDialog.show();
+                } else
+                    Toast.makeText(getApplicationContext(), "CANNOT PERFORM OPERATION WHILE OFFLINE", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -303,72 +314,80 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
         updateCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String title = titleET.getText().toString();
-                final String offerType = offerTypeS.getSelectedItem().toString();
-                final String price = priceET.getText().toString();
+                ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+                if (cd.isConnected()) {
+                    final String title = titleET.getText().toString();
+                    final String offerType = offerTypeS.getSelectedItem().toString();
+                    final String price = priceET.getText().toString();
 
-                String currency = currencyS.getSelectedItem().toString();
-                String currencyText = "";
-                if (currency.equals("€"))
-                    currencyText = "Euro";
-                else if (currency.equals("£"))
-                    currencyText = "Lyra";
-                else if (currency.equals("$"))
-                    currencyText = "Dollar";
-                final String currencyFinal = currencyText;
+                    String currency = currencyS.getSelectedItem().toString();
+                    String currencyText = "";
+                    if (currency.equals("€"))
+                        currencyText = "Euro";
+                    else if (currency.equals("£"))
+                        currencyText = "Lyra";
+                    else if (currency.equals("$"))
+                        currencyText = "Dollar";
+                    final String currencyFinal = currencyText;
 
-                final String brand = brandS.getSelectedItem().toString();
-                final String model = modelS.getSelectedItem().toString();
-                final String year = yearS.getSelectedItem().toString();
-                final String color = colorS.getSelectedItem().toString();
-                final String fuelType = fuelTypeS.getSelectedItem().toString();
-                final String transmission = transmissionS.getSelectedItem().toString();
-                final String kmOnBoard = kmOnBoardET.getText().toString();
-                final String kmOrMiles = kmOmS.getSelectedItem().toString();
-                final String engineCapacity = engineCS.getSelectedItem().toString();
-                final String doorsNumber = doorS.getSelectedItem().toString();
-                final String seatsNumber = seatS.getSelectedItem().toString();
-                final String contact = contactET.getText().toString();
-                final String description = descriptionET.getText().toString();
+                    final String brand = brandS.getSelectedItem().toString();
+                    final String model = modelS.getSelectedItem().toString();
+                    final String year = yearS.getSelectedItem().toString();
+                    final String color = colorS.getSelectedItem().toString();
+                    final String fuelType = fuelTypeS.getSelectedItem().toString();
+                    final String transmission = transmissionS.getSelectedItem().toString();
+                    final String kmOnBoard = kmOnBoardET.getText().toString();
+                    final String kmOrMiles = kmOmS.getSelectedItem().toString();
+                    final String engineCapacity = engineCS.getSelectedItem().toString();
+                    final String doorsNumber = doorS.getSelectedItem().toString();
+                    final String seatsNumber = seatS.getSelectedItem().toString();
+                    final String contact = contactET.getText().toString();
+                    final String description = descriptionET.getText().toString();
+                    Switch avalability = findViewById(R.id.availabilitySwitch);
+                    final Boolean toggle = avalability.isChecked();
 
-                requestUpdateQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest request = new StringRequest(Request.Method.POST, UPDATE_ANNOUNCEMENT_URL, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> parameters = new HashMap<>();
-                        parameters.put("ID", String.valueOf(announcement.getID()));
-                        parameters.put("image_url", "");
-                        parameters.put("autor", ActivityMain.acct.getEmail());
-                        parameters.put("title", title);
-                        parameters.put("offerType", offerType);
-                        parameters.put("price", price);
-                        parameters.put("currency", currencyFinal);
-                        parameters.put("brand", brand);
-                        parameters.put("model", model);
-                        parameters.put("year", year);
-                        parameters.put("color", color);
-                        parameters.put("fuelType", fuelType);
-                        parameters.put("transmission", transmission);
-                        parameters.put("onBoardKM", kmOnBoard);
-                        parameters.put("kmOrMiles", kmOrMiles);
-                        parameters.put("engineCapacity", engineCapacity);
-                        parameters.put("doorsNumber", doorsNumber);
-                        parameters.put("seatsNumber", seatsNumber);
-                        parameters.put("contact", contact);
-                        parameters.put("description", description);
-                        return parameters;
-                    }
-                };
-                requestUpdateQueue.add(request);
-                Toast.makeText(getApplicationContext(), "UPDATED...", Toast.LENGTH_SHORT).show();
+                    requestUpdateQueue = Volley.newRequestQueue(getApplicationContext());
+                    StringRequest request = new StringRequest(Request.Method.POST, UPDATE_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> parameters = new HashMap<>();
+                            parameters.put("ID", String.valueOf(announcement.getID()));
+                            parameters.put("image_url", "");
+                            parameters.put("autor", ActivityMain.acct.getEmail());
+                            parameters.put("title", title);
+                            if (toggle)
+                                parameters.put("offerType", offerType);
+                            else parameters.put("offerType", "Not available");
+                            parameters.put("price", price);
+                            parameters.put("currency", currencyFinal);
+                            parameters.put("brand", brand);
+                            parameters.put("model", model);
+                            parameters.put("year", year);
+                            parameters.put("color", color);
+                            parameters.put("fuelType", fuelType);
+                            parameters.put("transmission", transmission);
+                            parameters.put("onBoardKM", kmOnBoard);
+                            parameters.put("kmOrMiles", kmOrMiles);
+                            parameters.put("engineCapacity", engineCapacity);
+                            parameters.put("doorsNumber", doorsNumber);
+                            parameters.put("seatsNumber", seatsNumber);
+                            parameters.put("contact", contact);
+                            parameters.put("description", description);
+                            return parameters;
+                        }
+                    };
+                    requestUpdateQueue.add(request);
+                    Toast.makeText(getApplicationContext(), "UPDATED...", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "CANNOT PERFORM OPERATION WHILE OFFLINE", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -541,7 +560,7 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
     }
 
     private void fillOfferSpinner() {
-        String[] values = {"Sell", "Trade", "Not available"};
+        String[] values = {"Sell", "Trade"};
         Spinner spinner = this.findViewById(R.id.offerSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -609,12 +628,14 @@ public class ActivityCarAnnouncementEdit extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ActivityCarAnnouncementEdit.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         startActivity(new Intent(ActivityCarAnnouncementEdit.this, ActivityMain.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         this.finish();
         return true;
     }
