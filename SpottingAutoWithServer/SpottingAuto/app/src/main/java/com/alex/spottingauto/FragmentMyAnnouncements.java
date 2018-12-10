@@ -32,7 +32,7 @@ import java.util.List;
 
 public class FragmentMyAnnouncements extends Fragment {
     //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static RequestQueue requestQueue;
     private static CustomAdapter customAdapter;

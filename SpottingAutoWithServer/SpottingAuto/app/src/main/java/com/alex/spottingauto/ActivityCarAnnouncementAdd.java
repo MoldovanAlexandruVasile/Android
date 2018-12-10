@@ -39,7 +39,7 @@ import java.util.Map;
 
 public class ActivityCarAnnouncementAdd extends AppCompatActivity {
     //private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
-    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/insertAnnouncement.php";
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
     private static RequestQueue requestQueue;
 
     @Override
@@ -200,35 +200,27 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
         final EditText contactET = findViewById(R.id.contactET);
         final EditText descriptionET = findViewById(R.id.descriptionET);
 
-        CardView saveCardView = findViewById(R.id.saveCardView);
-        saveCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String title = titleET.getText().toString();
-                final String offerType = offerTypeS.getSelectedItem().toString();
-                final String price = priceET.getText().toString();
-                final String currency = currencyS.getSelectedItem().toString();
-                String currencyText = "";
-                if (currency.equals("€"))
-                    currencyText = "Euro";
-                else if (currency.equals("£"))
-                    currencyText = "Lyra";
-                else if (currency.equals("$"))
-                    currencyText = "Dollar";
-                final String currencyFinal = currencyText;
-                final String brand = brandS.getSelectedItem().toString();
-                final String model = modelS.getSelectedItem().toString();
-                final String year = yearS.getSelectedItem().toString();
-                final String color = colorS.getSelectedItem().toString();
-                final String fuelType = fuelTypeS.getSelectedItem().toString();
-                final String transmission = transmissionS.getSelectedItem().toString();
-                final String kmOnBoard = kmOnBoardET.getText().toString();
-                final String kmOrMiles = kmOmS.getSelectedItem().toString();
-                final String engineCapacity = engineCS.getSelectedItem().toString();
-                final String doorsNumber = doorS.getSelectedItem().toString();
-                final String seatsNumber = seatS.getSelectedItem().toString();
-                final String contact = contactET.getText().toString();
-                final String description = descriptionET.getText().toString();
+        if (ActivityMain.offlineManagement.size() != 0 && new ConnectionDetector(getApplicationContext()).isConnected()) {
+            while (ActivityMain.offlineManagement.size() > 0) {
+                Announcement currentAnnouncement = ActivityMain.offlineManagement.get(0);
+                final String title = currentAnnouncement.getTitle();
+                final String offerType = currentAnnouncement.getOfferType();
+                final String price = currentAnnouncement.getPrice();
+                final String currencyFinal = currentAnnouncement.getCurrency();
+                final String brand = currentAnnouncement.getBrand();
+                final String model = currentAnnouncement.getModel();
+                final String year = currentAnnouncement.getYear();
+                final String color = currentAnnouncement.getColor();
+                final String fuelType = currentAnnouncement.getFuelType();
+                final String transmission = currentAnnouncement.getTransmission();
+                final String kmOnBoard = currentAnnouncement.getOnBoardKM();
+                final String kmOrMiles = currentAnnouncement.getKmOrMiles();
+                final String engineCapacity = currentAnnouncement.getEngineCapacity();
+                final String doorsNumber = currentAnnouncement.getDoorsNumber();
+                final String seatsNumber = currentAnnouncement.getSeatsNumber();
+                final String contact = currentAnnouncement.getContact();
+                final String description = currentAnnouncement.getDescription();
+
                 requestQueue = Volley.newRequestQueue(getApplicationContext());
                 StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
                     @Override
@@ -265,10 +257,89 @@ public class ActivityCarAnnouncementAdd extends AppCompatActivity {
                     }
                 };
                 requestQueue.add(request);
-                Toast.makeText(getApplicationContext(), "ANNOUNCEMENT ADDED...", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                finish();
+                ActivityMain.offlineManagement.remove(0);
+            }
+        }
+
+        CardView saveCardView = findViewById(R.id.saveCardView);
+        saveCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+                final String title = titleET.getText().toString();
+                final String offerType = offerTypeS.getSelectedItem().toString();
+                final String price = priceET.getText().toString();
+                final String currency = currencyS.getSelectedItem().toString();
+                String currencyText = "";
+                if (currency.equals("€"))
+                    currencyText = "Euro";
+                else if (currency.equals("£"))
+                    currencyText = "Lyra";
+                else if (currency.equals("$"))
+                    currencyText = "Dollar";
+                final String currencyFinal = currencyText;
+                final String brand = brandS.getSelectedItem().toString();
+                final String model = modelS.getSelectedItem().toString();
+                final String year = yearS.getSelectedItem().toString();
+                final String color = colorS.getSelectedItem().toString();
+                final String fuelType = fuelTypeS.getSelectedItem().toString();
+                final String transmission = transmissionS.getSelectedItem().toString();
+                final String kmOnBoard = kmOnBoardET.getText().toString();
+                final String kmOrMiles = kmOmS.getSelectedItem().toString();
+                final String engineCapacity = engineCS.getSelectedItem().toString();
+                final String doorsNumber = doorS.getSelectedItem().toString();
+                final String seatsNumber = seatS.getSelectedItem().toString();
+                final String contact = contactET.getText().toString();
+                final String description = descriptionET.getText().toString();
+                if (cd.isConnected()) {
+                    requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> parameters = new HashMap<>();
+                            parameters.put("image_url", "");
+                            parameters.put("autor", ActivityMain.acct.getEmail());
+                            parameters.put("title", title);
+                            parameters.put("offerType", offerType);
+                            parameters.put("price", price);
+                            parameters.put("currency", currencyFinal);
+                            parameters.put("brand", brand);
+                            parameters.put("model", model);
+                            parameters.put("year", year);
+                            parameters.put("color", color);
+                            parameters.put("fuelType", fuelType);
+                            parameters.put("transmission", transmission);
+                            parameters.put("onBoardKM", kmOnBoard);
+                            parameters.put("kmOrMiles", kmOrMiles);
+                            parameters.put("engineCapacity", engineCapacity);
+                            parameters.put("doorsNumber", doorsNumber);
+                            parameters.put("seatsNumber", seatsNumber);
+                            parameters.put("contact", contact);
+                            parameters.put("description", description);
+                            return parameters;
+                        }
+                    };
+                    requestQueue.add(request);
+                    Toast.makeText(getApplicationContext(), "ANNOUNCEMENT ADDED...", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ActivityCarAnnouncementAdd.this, ActivityMain.class));
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Your announcement will be added when you will be online",
+                            Toast.LENGTH_SHORT).show();
+                    Announcement newAnnouncement = new Announcement("", ActivityMain.acct.getEmail(), title, offerType,
+                            price, currencyFinal, brand, model, year, color, fuelType, transmission, kmOnBoard, kmOrMiles,
+                            engineCapacity, doorsNumber, seatsNumber, contact, description);
+                    ActivityMain.offlineManagement.add(newAnnouncement);
+                }
             }
         });
     }

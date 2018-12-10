@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -27,14 +28,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ActivityCarAnnouncementDetails extends AppCompatActivity {
     private static RequestQueue requestQueue;
     //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
+    //private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
     private static List<Announcement> announcementList;
-    private static FragmentCarsList.CustomAdapter customAdapter;
     private static Announcement announcement;
 
     @Override
@@ -48,6 +52,68 @@ public class ActivityCarAnnouncementDetails extends AppCompatActivity {
 
         if (!cd.isConnected())
             Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
+
+        if (ActivityMain.offlineManagement.size() != 0 && new ConnectionDetector(getApplicationContext()).isConnected()){
+            while (ActivityMain.offlineManagement.size() > 0){
+                Announcement currentAnnouncement = ActivityMain.offlineManagement.get(0);
+                final String title = currentAnnouncement.getTitle();
+                final String offerType = currentAnnouncement.getOfferType();
+                final String price = currentAnnouncement.getPrice();
+                final String currencyFinal = currentAnnouncement.getCurrency();
+                final String brand = currentAnnouncement.getBrand();
+                final String model = currentAnnouncement.getModel();
+                final String year = currentAnnouncement.getYear();
+                final String color = currentAnnouncement.getColor();
+                final String fuelType = currentAnnouncement.getFuelType();
+                final String transmission = currentAnnouncement.getTransmission();
+                final String kmOnBoard = currentAnnouncement.getOnBoardKM();
+                final String kmOrMiles = currentAnnouncement.getKmOrMiles();
+                final String engineCapacity = currentAnnouncement.getEngineCapacity();
+                final String doorsNumber = currentAnnouncement.getDoorsNumber();
+                final String seatsNumber = currentAnnouncement.getSeatsNumber();
+                final String contact = currentAnnouncement.getContact();
+                final String description = currentAnnouncement.getDescription();
+
+                requestQueue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> parameters = new HashMap<>();
+                        parameters.put("image_url", "");
+                        parameters.put("autor", ActivityMain.acct.getEmail());
+                        parameters.put("title", title);
+                        parameters.put("offerType", offerType);
+                        parameters.put("price", price);
+                        parameters.put("currency", currencyFinal);
+                        parameters.put("brand", brand);
+                        parameters.put("model", model);
+                        parameters.put("year", year);
+                        parameters.put("color", color);
+                        parameters.put("fuelType", fuelType);
+                        parameters.put("transmission", transmission);
+                        parameters.put("onBoardKM", kmOnBoard);
+                        parameters.put("kmOrMiles", kmOrMiles);
+                        parameters.put("engineCapacity", engineCapacity);
+                        parameters.put("doorsNumber", doorsNumber);
+                        parameters.put("seatsNumber", seatsNumber);
+                        parameters.put("contact", contact);
+                        parameters.put("description", description);
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
+                ActivityMain.offlineManagement.remove(0);
+            }
+        }
+
         announcementList = new ArrayList<>();
         Intent intent = getIntent();
         final Integer pos = Integer.valueOf(intent.getStringExtra("position"));

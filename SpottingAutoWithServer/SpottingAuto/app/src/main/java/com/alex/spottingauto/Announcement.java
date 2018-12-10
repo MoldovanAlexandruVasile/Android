@@ -22,6 +22,30 @@ public class Announcement {
     private String contact;
     private String description;
 
+    public Announcement(String image_url, String autor, String title, String offerType, String price, String currency, String brand,
+                        String model, String year, String color, String fuelType, String transmission, String onBoardKM, String kmOrMiles,
+                        String engineCapacity, String doorsNumber, String seatsNumber, String contact, String description) {
+        this.image_url = image_url;
+        this.autor = autor;
+        this.title = title;
+        this.offerType = offerType;
+        this.price = price;
+        this.currency = currency;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.color = color;
+        this.fuelType = fuelType;
+        this.transmission = transmission;
+        this.onBoardKM = onBoardKM;
+        this.kmOrMiles = kmOrMiles;
+        this.engineCapacity = engineCapacity;
+        this.doorsNumber = doorsNumber;
+        this.seatsNumber = seatsNumber;
+        this.contact = contact;
+        this.description = description;
+    }
+
     public Integer getID() {
         return ID;
     }

@@ -3,6 +3,7 @@ package com.alex.spottingauto;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ import java.util.List;
 public class FragmentCarsList extends Fragment {
     private static RequestQueue requestQueue;
     //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static View carsListView;
     private static ListView listView;
@@ -90,6 +91,16 @@ public class FragmentCarsList extends Fragment {
                 });
         requestQueue.add(objectRequest);
 
+        FloatingActionButton addFAB = carsListView.findViewById(R.id.addFAB);
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), ActivityCarAnnouncementAdd.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                getActivity().finish();
+            }
+        });
         return carsListView;
     }
 

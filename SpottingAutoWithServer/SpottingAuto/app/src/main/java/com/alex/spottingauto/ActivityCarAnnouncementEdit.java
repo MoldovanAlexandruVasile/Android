@@ -49,12 +49,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ActivityCarAnnouncementEdit extends AppCompatActivity {
-//    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
+    //    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
 //    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/deleteAnnouncement.php";
 //    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/updateAnnouncement.php";
-private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/deleteAnnouncement.php";
-    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announcements/updateAnnouncement.php";
+//    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/deleteAnnouncement.php";
+    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/updateAnnouncement.php";
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
     private static List<Announcement> announcementList;
     private static RequestQueue requestQueue, requestDeleteQueue, requestUpdateQueue;
     private static Announcement announcement;
@@ -91,6 +93,67 @@ private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announ
         fillCurrencySpinner();
         fillEngineCapacity();
         fillColorSpinner("Colors");
+
+        if (ActivityMain.offlineManagement.size() > 0 && new ConnectionDetector(getApplicationContext()).isConnected()) {
+            while (ActivityMain.offlineManagement.size() > 0) {
+                Announcement currentAnnouncement = ActivityMain.offlineManagement.get(0);
+                final String title = currentAnnouncement.getTitle();
+                final String offerType = currentAnnouncement.getOfferType();
+                final String price = currentAnnouncement.getPrice();
+                final String currencyFinal = currentAnnouncement.getCurrency();
+                final String brand = currentAnnouncement.getBrand();
+                final String model = currentAnnouncement.getModel();
+                final String year = currentAnnouncement.getYear();
+                final String color = currentAnnouncement.getColor();
+                final String fuelType = currentAnnouncement.getFuelType();
+                final String transmission = currentAnnouncement.getTransmission();
+                final String kmOnBoard = currentAnnouncement.getOnBoardKM();
+                final String kmOrMiles = currentAnnouncement.getKmOrMiles();
+                final String engineCapacity = currentAnnouncement.getEngineCapacity();
+                final String doorsNumber = currentAnnouncement.getDoorsNumber();
+                final String seatsNumber = currentAnnouncement.getSeatsNumber();
+                final String contact = currentAnnouncement.getContact();
+                final String description = currentAnnouncement.getDescription();
+
+                requestQueue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> parameters = new HashMap<>();
+                        parameters.put("image_url", "");
+                        parameters.put("autor", ActivityMain.acct.getEmail());
+                        parameters.put("title", title);
+                        parameters.put("offerType", offerType);
+                        parameters.put("price", price);
+                        parameters.put("currency", currencyFinal);
+                        parameters.put("brand", brand);
+                        parameters.put("model", model);
+                        parameters.put("year", year);
+                        parameters.put("color", color);
+                        parameters.put("fuelType", fuelType);
+                        parameters.put("transmission", transmission);
+                        parameters.put("onBoardKM", kmOnBoard);
+                        parameters.put("kmOrMiles", kmOrMiles);
+                        parameters.put("engineCapacity", engineCapacity);
+                        parameters.put("doorsNumber", doorsNumber);
+                        parameters.put("seatsNumber", seatsNumber);
+                        parameters.put("contact", contact);
+                        parameters.put("description", description);
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
+                ActivityMain.offlineManagement.remove(0);
+            }
+        }
 
         Intent intent = getIntent();
         final Integer pos = Integer.valueOf(intent.getStringExtra("position"));
@@ -282,11 +345,13 @@ private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announ
                                 protected Map<String, String> getParams() {
                                     Map<String, String> parameters = new HashMap<>();
                                     String ID = String.valueOf(announcement.getID());
-                                    Log.e("ID", ID);
+                                    Log.e("RestID: ", ID);
                                     parameters.put("ID", ID);
                                     return parameters;
                                 }
                             };
+                            if (ActivityMain.offlineManagement.contains(announcement))
+                                ActivityMain.offlineManagement.remove(announcement);
                             requestDeleteQueue.add(request);
                             Toast.makeText(getApplicationContext(), "DELETED...", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), ActivityMain.class);
@@ -384,6 +449,12 @@ private static final String ANNOUNCEMENT_URL = "http://192.168.0.102:8012/Announ
                             return parameters;
                         }
                     };
+                    if (ActivityMain.offlineManagement.contains(announcement)) {
+                        ActivityMain.offlineManagement.remove(announcement);
+                        ActivityMain.offlineManagement.add(new Announcement("", ActivityMain.acct.getEmail(), title, offerType,
+                                price, currencyFinal, brand, model, year, color, fuelType, transmission, kmOnBoard, kmOrMiles,
+                                engineCapacity, doorsNumber, seatsNumber, contact, description));
+                    }
                     requestUpdateQueue.add(request);
                     Toast.makeText(getApplicationContext(), "UPDATED...", Toast.LENGTH_SHORT).show();
                 } else

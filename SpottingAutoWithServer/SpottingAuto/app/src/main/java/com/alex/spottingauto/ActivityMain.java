@@ -21,6 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,10 +36,19 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
+    private static RequestQueue requestQueue;
+    public static List<Announcement> offlineManagement = new ArrayList<>();
     public static GoogleSignInAccount acct;
     private GoogleApiClient googleApiClient;
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -41,6 +56,67 @@ public class ActivityMain extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (ActivityMain.offlineManagement.size() != 0 && new ConnectionDetector(getApplicationContext()).isConnected()) {
+            while (ActivityMain.offlineManagement.size() > 0) {
+                Announcement currentAnnouncement = ActivityMain.offlineManagement.get(0);
+                final String title = currentAnnouncement.getTitle();
+                final String offerType = currentAnnouncement.getOfferType();
+                final String price = currentAnnouncement.getPrice();
+                final String currencyFinal = currentAnnouncement.getCurrency();
+                final String brand = currentAnnouncement.getBrand();
+                final String model = currentAnnouncement.getModel();
+                final String year = currentAnnouncement.getYear();
+                final String color = currentAnnouncement.getColor();
+                final String fuelType = currentAnnouncement.getFuelType();
+                final String transmission = currentAnnouncement.getTransmission();
+                final String kmOnBoard = currentAnnouncement.getOnBoardKM();
+                final String kmOrMiles = currentAnnouncement.getKmOrMiles();
+                final String engineCapacity = currentAnnouncement.getEngineCapacity();
+                final String doorsNumber = currentAnnouncement.getDoorsNumber();
+                final String seatsNumber = currentAnnouncement.getSeatsNumber();
+                final String contact = currentAnnouncement.getContact();
+                final String description = currentAnnouncement.getDescription();
+
+                requestQueue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest request = new StringRequest(Request.Method.POST, INSERT_ANNOUNCEMENT_URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> parameters = new HashMap<>();
+                        parameters.put("image_url", "");
+                        parameters.put("autor", ActivityMain.acct.getEmail());
+                        parameters.put("title", title);
+                        parameters.put("offerType", offerType);
+                        parameters.put("price", price);
+                        parameters.put("currency", currencyFinal);
+                        parameters.put("brand", brand);
+                        parameters.put("model", model);
+                        parameters.put("year", year);
+                        parameters.put("color", color);
+                        parameters.put("fuelType", fuelType);
+                        parameters.put("transmission", transmission);
+                        parameters.put("onBoardKM", kmOnBoard);
+                        parameters.put("kmOrMiles", kmOrMiles);
+                        parameters.put("engineCapacity", engineCapacity);
+                        parameters.put("doorsNumber", doorsNumber);
+                        parameters.put("seatsNumber", seatsNumber);
+                        parameters.put("contact", contact);
+                        parameters.put("description", description);
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
+                ActivityMain.offlineManagement.remove(0);
+            }
+        }
 
         setContentView(R.layout.activity_main_nav_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
