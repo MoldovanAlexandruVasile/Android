@@ -41,7 +41,7 @@
                         android:layout_marginLeft="30dp"
                         android:layout_marginStart="30dp"
                         android:text="Brand:"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/brandTextView"
@@ -53,7 +53,7 @@
                         android:layout_marginLeft="79dp"
                         android:layout_marginStart="79dp"
                         android:layout_marginTop="0dp"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/white" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -69,7 +69,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:text="Year:"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/yearTextView"
@@ -78,7 +78,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/white" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -106,7 +106,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/white" />
             </RelativeLayout>
 
         </RelativeLayout>

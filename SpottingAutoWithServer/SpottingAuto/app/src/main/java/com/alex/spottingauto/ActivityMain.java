@@ -228,7 +228,6 @@ public class ActivityMain extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 goToLogIn();
-                finish();
             }
         });
 
@@ -261,6 +260,7 @@ public class ActivityMain extends AppCompatActivity
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
+                        finish();
                         Toast.makeText(getApplicationContext(), "You've been logged out.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), ActivityLogIn.class);
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
