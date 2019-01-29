@@ -1,6 +1,5 @@
 package com.alex.exam.Activity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +31,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
+
 import static com.alex.exam.AppUtils.AppUtils.getAvailable;
 import static com.alex.exam.AppUtils.HTTPRequests.buyProductServer;
 
 public class ActivityClient extends AppCompatActivity {
-
+    private OkHttpClient client;
     private List<Product> products;
     private ProgressBar progressBar;
     private RelativeLayout rellay1;
@@ -78,7 +85,11 @@ public class ActivityClient extends AppCompatActivity {
         listView.setAdapter(customAdapter);
         final ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
         if (cd.isConnected()) {
-
+            client = new OkHttpClient();
+            Request request = new Request.Builder().url("ws://192.168.0.103:2024").build();
+            EchoWebSocketListener listener = new EchoWebSocketListener();
+            WebSocket ws = client.newWebSocket(request, listener);
+            client.dispatcher().executorService().shutdown();
         } else {
             handler.postDelayed(displayRefreshBtn, 2000);
             refresh.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +116,6 @@ public class ActivityClient extends AppCompatActivity {
     }
 
     class CustomAdapter extends BaseAdapter {
-
         @Override
         public int getCount() {
             return products.size();
@@ -149,13 +159,13 @@ public class ActivityClient extends AppCompatActivity {
         }
     }
 
-    private void buyProduct(final Product p) {
+    private void buyProduct(final Product product) {
         final Dialog customDialog = new Dialog(ActivityClient.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setCanceledOnTouchOutside(false);
         customDialog.setContentView(R.layout.custom_buy_pop_up);
         TextView title = customDialog.findViewById(R.id.t1);
-        title.setText(p.getName());
+        title.setText(product.getName());
         CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
 
         yesCardView.setOnClickListener(new View.OnClickListener() {
@@ -165,10 +175,11 @@ public class ActivityClient extends AppCompatActivity {
                 String quantity = quantityET.getText().toString();
                 if (quantity.isEmpty())
                     Toast.makeText(ActivityClient.this, "Please fill quantity.", Toast.LENGTH_SHORT).show();
-                else if (Integer.valueOf(quantity) > p.getQuantity())
+                else if (Integer.valueOf(quantity) > product.getQuantity())
                     Toast.makeText(ActivityClient.this, "Not enough quantity.", Toast.LENGTH_SHORT).show();
                 else {
                     Toast.makeText(ActivityClient.this, "Product bought.", Toast.LENGTH_SHORT).show();
+                    Product p = product;
                     buyProductServer(p.getID(), Integer.valueOf(quantity), getApplicationContext());
                     showInfo(p, customDialog, quantity);
                     p.setQuantity(Integer.valueOf(quantity));
@@ -232,5 +243,36 @@ public class ActivityClient extends AppCompatActivity {
         intent.putExtra("redirect", "client");
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         startActivity(intent);
+    }
+
+    private class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            Log.d("ClientActivity", "Waiting info...");
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            Log.d("Exam", "Receiving: " + text);
+            goToMainAndBack();
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+            Log.d("Exam", "Receiving bytes: " + bytes.hex());
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+            Log.d("Exam", "Closing: " + code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            Log.d("Exam", "Error: " + t.getMessage());
+        }
     }
 }
