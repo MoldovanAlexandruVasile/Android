@@ -39,6 +39,7 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 
 import static com.alex.exam.AppUtils.AppUtils.getAvailable;
+import static com.alex.exam.AppUtils.HTTPRequests.IP;
 import static com.alex.exam.AppUtils.HTTPRequests.buyProductServer;
 
 public class ActivityClient extends AppCompatActivity {
@@ -86,7 +87,7 @@ public class ActivityClient extends AppCompatActivity {
         final ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
         if (cd.isConnected()) {
             client = new OkHttpClient();
-            Request request = new Request.Builder().url("ws://192.168.0.103:2024").build();
+            Request request = new Request.Builder().url("ws://" + IP).build();
             EchoWebSocketListener listener = new EchoWebSocketListener();
             WebSocket ws = client.newWebSocket(request, listener);
             client.dispatcher().executorService().shutdown();
@@ -215,7 +216,6 @@ public class ActivityClient extends AppCompatActivity {
         Integer priceC = Integer.valueOf(q) * p.getPrice();
         price.setText(String.valueOf(priceC));
         CardView yesCardView = customDialog.findViewById(R.id.yesPopUpCardView);
-
         yesCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,7 +224,6 @@ public class ActivityClient extends AppCompatActivity {
                 goToMainAndBack();
             }
         });
-
         Objects.requireNonNull(customDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         customDialog.show();
     }
