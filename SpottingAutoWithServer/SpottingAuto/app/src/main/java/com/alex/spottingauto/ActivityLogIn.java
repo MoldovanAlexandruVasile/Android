@@ -48,7 +48,8 @@ import java.util.Objects;
 
 public class ActivityLogIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String ADMIN_URL = "http://192.168.0.103:8012/Admins/admincontroller.php?view=all";
+    //private static final String ADMIN_URL = "http://192.168.0.103:8012/Admins/admincontroller.php?view=all";
+    private static final String ADMIN_URL = "http://192.168.43.22:8012/Admins/admincontroller.php?view=all";
     private static List<Admin> adminsList;
     private GoogleApiClient googleApiClient;
     public static final int SIGN_IN_CODE = 1997;

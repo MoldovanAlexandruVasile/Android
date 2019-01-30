@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentMyAnnouncements extends Fragment {
-    //private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
+    //private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
     private static List<Announcement> announcementList;
     private static RequestQueue requestQueue;
     private static CustomAdapter customAdapter;
@@ -66,7 +66,6 @@ public class FragmentMyAnnouncements extends Fragment {
                                     announcementList.add(announcement);
                             }
                             customAdapter = new CustomAdapter();
-                            listView.setAdapter(customAdapter);
                             listView.setAdapter(customAdapter);
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override

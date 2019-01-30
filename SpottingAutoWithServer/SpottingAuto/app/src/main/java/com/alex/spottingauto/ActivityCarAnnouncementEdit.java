@@ -49,14 +49,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ActivityCarAnnouncementEdit extends AppCompatActivity {
-    //    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
-//    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/deleteAnnouncement.php";
-//    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/updateAnnouncement.php";
-//    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
-    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
-    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/deleteAnnouncement.php";
-    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/updateAnnouncement.php";
-    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
+    private static final String ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/announcementcontroller.php?view=all";
+    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/deleteAnnouncement.php";
+    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/updateAnnouncement.php";
+    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.43.22:8012/Announcements/insertAnnouncement.php";
+//    private static final String ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/announcementcontroller.php?view=all";
+//    private static final String DELETE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/deleteAnnouncement.php";
+//    private static final String UPDATE_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/updateAnnouncement.php";
+//    private static final String INSERT_ANNOUNCEMENT_URL = "http://192.168.0.103:8012/Announcements/insertAnnouncement.php";
     private static List<Announcement> announcementList;
     private static RequestQueue requestQueue, requestDeleteQueue, requestUpdateQueue;
     private static Announcement announcement;

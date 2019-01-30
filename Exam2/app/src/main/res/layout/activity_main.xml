@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ActivityMain">
+
+    <Button
+        android:id="@+id/clientBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginLeft="126dp"
+        android:layout_marginRight="125dp"
+        android:layout_marginStart="126dp"
+        android:layout_marginTop="177dp"
+        android:text="@string/client_section"
+        app:layout_constraintBottom_toTopOf="@+id/clerkBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/clerkBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="221dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginLeft="126dp"
+        android:layout_marginRight="125dp"
+        android:layout_marginStart="126dp"
+        android:layout_marginTop="17dp"
+        android:text="@string/clerk_section"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clientBtn" />
+
+    <TextView
+        android:id="@+id/clerkInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/clerkBtn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/clark_section_is_not_available_while_offline"
+        android:textColor="@color/black"
+        android:visibility="gone" />
+
+</RelativeLayout>
