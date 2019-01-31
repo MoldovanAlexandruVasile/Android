@@ -20,10 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.ActivityClerk" />
-        <activity android:name=".Activity.ActivityClient" />
-        <activity android:name=".Activity.ActivityAddProduct" />
-        <activity android:name=".Activity.ActivityMyPurchases"/>
+        <activity android:name=".Activity.ActivityRate" />
+        <activity android:name=".Activity.ActivitySection" />
+        <activity android:name=".Activity.ActivityAddBookmark" />
+        <activity android:name=".Activity.ActivityMySeenBookmarks"/>
+        <activity android:name=".Activity.ActivityBookmarksByType" />
     </application>
 
 </manifest>

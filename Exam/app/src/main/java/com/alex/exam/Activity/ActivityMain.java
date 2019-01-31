@@ -9,25 +9,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alex.exam.AppUtils.ConnectionDetector;
-import com.alex.exam.Database.Product;
-import com.alex.exam.Database.TableControllerProducts;
+import com.alex.exam.Database.Bookmark;
+import com.alex.exam.Database.TableControllerBookmarks;
 import com.alex.exam.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.alex.exam.AppUtils.AppUtils.getAvailable;
-import static com.alex.exam.AppUtils.HTTPRequests.populateProducts;
+import static com.alex.exam.AppUtils.HTTPRequests.populateTypes;
+import static com.alex.exam.AppUtils.HTTPRequests.populateUnderratedBookmarks;
 
 public class ActivityMain extends AppCompatActivity {
 
-    public static List<Product> products;
-    public static TableControllerProducts ctrl;
+    public static List<Bookmark> underratedBookmarks;
+    public static List<Bookmark> bookmarksByType;
+    public static List<String> types;
+    public static TableControllerBookmarks ctrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        products = new ArrayList<>();
-        ctrl = new TableControllerProducts(getApplicationContext());
+        underratedBookmarks = new ArrayList<>();
+        types = new ArrayList<>();
+        bookmarksByType = new ArrayList<>();
+        ctrl = new TableControllerBookmarks(getApplicationContext());
         String goToClient;
         try {
             goToClient = getIntent().getStringExtra("redirect");
@@ -35,7 +39,8 @@ public class ActivityMain extends AppCompatActivity {
             goToClient = null;
         }
         if (goToClient != null && goToClient.equals("client")) {
-            populateProducts(getApplicationContext());
+            populateUnderratedBookmarks(getApplicationContext());
+            populateTypes(getApplicationContext());
             goBackToClient();
         } else if (goToClient != null && goToClient.equals("clerk")) {
             goBackToClerk();
@@ -54,12 +59,13 @@ public class ActivityMain extends AppCompatActivity {
             info.setVisibility(View.VISIBLE);
             Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
         } else {
-            populateProducts(getApplicationContext());
+            populateUnderratedBookmarks(getApplicationContext());
+            populateTypes(getApplicationContext());
             clerk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
-                    Intent intent = new Intent(getApplicationContext(), ActivityClerk.class);
+                    Intent intent = new Intent(getApplicationContext(), ActivityRate.class);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     startActivity(intent);
                 }
@@ -69,7 +75,7 @@ public class ActivityMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                Intent intent = new Intent(getApplicationContext(), ActivityClient.class);
+                Intent intent = new Intent(getApplicationContext(), ActivitySection.class);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 startActivity(intent);
             }
@@ -78,14 +84,14 @@ public class ActivityMain extends AppCompatActivity {
 
     private void goBackToClient() {
         finish();
-        Intent intent = new Intent(getApplicationContext(), ActivityClient.class);
+        Intent intent = new Intent(getApplicationContext(), ActivitySection.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
 
     private void goBackToClerk() {
         finish();
-        Intent intent = new Intent(getApplicationContext(), ActivityClerk.class);
+        Intent intent = new Intent(getApplicationContext(), ActivityRate.class);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         startActivity(intent);
     }
